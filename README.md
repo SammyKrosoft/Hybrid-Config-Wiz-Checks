@@ -19,7 +19,8 @@ Expected: External URL matches published fqdn for migration endpoint, and potent
 
 </details>
 
-### Test MRS health
+<details>
+  <summary>Test MRS health</summary>
 
 ```powershell
 Test-MRSHealth | ft Identity, check, passed, IsValid, Message
@@ -27,7 +28,10 @@ Test-MRSHealth | ft Identity, check, passed, IsValid, Message
 
 Expected: all pass. If Pass = False for an item, check Message to troubleshoot.
 
-### Test EWS MRSProxy.svc URL
+  </details>
+  
+  <details>
+  <summary>Test EWS MRSProxy.svc URL</summary>
 
 ```html
 https://mail.exampledomain/ews/mrsproxy.svc
@@ -35,7 +39,10 @@ https://mail.exampledomain/ews/mrsproxy.svc
 
 Expected: Authentication prompt pop-up. If not, EWS or MRSProxy is not configured.
 
-### Test migration server availability
+  </details>
+  
+  <details>
+  <summary>Test migration server availability</summary>
 
 #### Test autodiscovery for migration endpoint
 
@@ -53,7 +60,10 @@ $RemoteServerFQDN = "mail.contoso.ca"
 Test-MigrationServerAvailability -ExchangeRemoteMove -RemoteServer $RemoteServerFQDN -Credentials(Get-Credential)
 ```
 
-### Check IIS Logs
+  </details>
+  
+  <details>
+  <summary>Check IIS Logs</summary>
 
 If you get something like this:
 
@@ -62,3 +72,5 @@ WebExceptionStatus=ProtocolError;ResponseStatusCode=400;WebException=System.Net.
 ```
 
 Check that ExternalURL matches the published Remote Migration Endpoint FQDN
+
+  </details>
