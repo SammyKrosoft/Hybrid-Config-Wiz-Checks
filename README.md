@@ -6,13 +6,18 @@ This is to check Exchange Hybrid Config status
 ```powershell
 ```
 
+<details>
+<summary>
 ### Check EWS vdir configuration
+</summary>
 
 ```powershell
 Get-WebServicesVirtualDirectory -ADPropertiesOnly |ft ExternalAuthenticationMethods,InternalURL, Externalurl,MRSproxyEnabled,Server
 ```
 
 Expected: External URL matches published fqdn for migration endpoint, and potentially, ExternalURL should match InternalURL
+
+</details>
 
 ### Test MRS health
 
