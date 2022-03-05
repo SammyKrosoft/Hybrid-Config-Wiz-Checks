@@ -8,7 +8,7 @@ This is to check Exchange Hybrid Config status
 
 <details>
 <summary>
-### Check EWS vdir configuration
+**Check EWS vdir configuration**
 </summary>
 
 ```powershell
