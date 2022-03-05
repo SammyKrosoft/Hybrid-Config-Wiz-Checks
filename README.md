@@ -5,7 +5,7 @@ This is to check Exchange Hybrid Config status
 
 ```powershell
 New-HybridConfiguration
-Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null -Domains 'CanadaDrey.ca' -OnPremisesSmartHost 'mail.canadasam.ca' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.canadasam.ca' -SendingTransportServers 'E2016-01' -ReceivingTransportServers 'E2016-01' -EdgeTransportServers $null -Features FreeBusy,MoveMailbox,Mailtips,MessageTracking,OwaRedirection,OnlineArchive,SecureMail,Photos
+Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null -Domains 'CanadaDrey.ca' -OnPremisesSmartHost 'mail.contoso.ca' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca' -SendingTransportServers 'E2016-01' -ReceivingTransportServers 'E2016-01' -EdgeTransportServers $null -Features FreeBusy,MoveMailbox,Mailtips,MessageTracking,OwaRedirection,OnlineArchive,SecureMail,Photos
 
 # New-RemoteDomain
 New-RemoteDomain -Name 'Hybrid Domain - canadadrey.mail.onmicrosoft.com' -DomainName 'canadadrey.mail.onmicrosoft.com'
@@ -19,18 +19,18 @@ New-OrganizationRelationship -Name 'On-premises to O365 - 177cd94d-be11-44e9-b09
 New-OrganizationRelationship -Name 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -TargetApplicationUri $null -TargetAutodiscoverEpr $null -Enabled: $true -DomainNames 'CanadaDrey.ca'
 
 # New-SendConnector
-New-SendConnector -Name 'Outbound to Office 365 - 177cd94d-be11-44e9-b09f-db69389f3a35' -AddressSpaces 'smtp:canadadrey.mail.onmicrosoft.com;1' -DNSRoutingEnabled: $true -ErrorPolicies Default -Fqdn 'mail.canadasam.ca' -RequireTLS: $true -IgnoreSTARTTLS: $false -SourceTransportServers 'E2016-01' -SmartHosts $null -TLSAuthLevel DomainValidation -DomainSecureEnabled: $false -TLSDomain 'mail.protection.outlook.com' -CloudServicesMailEnabled: $true -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.canadasam.ca'
+New-SendConnector -Name 'Outbound to Office 365 - 177cd94d-be11-44e9-b09f-db69389f3a35' -AddressSpaces 'smtp:canadadrey.mail.onmicrosoft.com;1' -DNSRoutingEnabled: $true -ErrorPolicies Default -Fqdn 'mail.contoso.ca' -RequireTLS: $true -IgnoreSTARTTLS: $false -SourceTransportServers 'E2016-01' -SmartHosts $null -TLSAuthLevel DomainValidation -DomainSecureEnabled: $false -TLSDomain 'mail.protection.outlook.com' -CloudServicesMailEnabled: $true -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca'
 
 # New-InboundConnector
-New-InboundConnector -Name 'Inbound from a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -CloudServicesMailEnabled: $true -ConnectorSource HybridWizard -ConnectorType OnPremises -RequireTLS: $true -SenderDomains '*' -SenderIPAddresses $null -RestrictDomainsToIPAddresses: $false -TLSSenderCertificateName 'mail.canadasam.ca' -AssociatedAcceptedDomains $null
+New-InboundConnector -Name 'Inbound from a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -CloudServicesMailEnabled: $true -ConnectorSource HybridWizard -ConnectorType OnPremises -RequireTLS: $true -SenderDomains '*' -SenderIPAddresses $null -RestrictDomainsToIPAddresses: $false -TLSSenderCertificateName 'mail.contoso.ca' -AssociatedAcceptedDomains $null
 
-New-OutboundConnector -Name 'Outbound to a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -RecipientDomains 'CanadaDrey.ca' -SmartHosts 'mail.canadasam.ca' -ConnectorSource HybridWizard -ConnectorType OnPremises -TLSSettings DomainValidation -TLSDomain 'mail.canadasam.ca' -CloudServicesMailEnabled: $true -RouteAllMessagesViaOnPremises: $false -UseMxRecord: $false -IsTransportRuleScoped: $false
+New-OutboundConnector -Name 'Outbound to a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -RecipientDomains 'CanadaDrey.ca' -SmartHosts 'mail.contoso.ca' -ConnectorSource HybridWizard -ConnectorType OnPremises -TLSSettings DomainValidation -TLSDomain 'mail.contoso.ca' -CloudServicesMailEnabled: $true -RouteAllMessagesViaOnPremises: $false -UseMxRecord: $false -IsTransportRuleScoped: $false
 
 New-OnPremisesOrganization -HybridDomains 'CanadaDrey.ca' -InboundConnector 'Inbound from a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OutboundConnector 'Outbound to a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OrganizationRelationship 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OrganizationName CANADADREYMSG -Name 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OrganizationGuid 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5'
 
 New-IntraOrganizationConnector -Name 'HybridIOC - 177cd94d-be11-44e9-b09f-db69389f3a35' -DiscoveryEndpoint 'https://autodiscover-s.outlook.com/autodiscover/autodiscover.svc' -TargetAddressDomains 'canadadrey.mail.onmicrosoft.com' -Enabled: $true
 
-New-IntraOrganizationConnector -Name 'HybridIOC - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -DiscoveryEndpoint 'https://mail.canadasam.ca/autodiscover/autodiscover.svc' -TargetAddressDomains 'CanadaDrey.ca' -Enabled: $true
+New-IntraOrganizationConnector -Name 'HybridIOC - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -DiscoveryEndpoint 'https://mail.contoso.ca/autodiscover/autodiscover.svc' -TargetAddressDomains 'CanadaDrey.ca' -Enabled: $true
 
 New-AuthServer -Name 'ACS - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://accounts.accesscontrol.windows.net/e5923069-9fac-4809-b7c9-a0893265a0e0/metadata/json/1' -DomainName 'CanadaDrey.ca','canadadrey.mail.onmicrosoft.com'
 
@@ -41,10 +41,7 @@ New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)'
 
 
 
-## Test Hybrid Configuration Wizard
-
-```powershell
-```
+## Post HCW install tests to do
 
 <details>
 <summary>
