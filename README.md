@@ -67,17 +67,17 @@ Test-MigrationServerAvailability -ExchangeRemoteMove -RemoteServer $RemoteServer
     
 #### HCW log location
   
-    By default, these logs are located here:
+By default, these logs are located here:
     
-    ```
-    %UserProfile%\AppData\Roaming\Microsoft\Exchange Hybrid Configuration
-    ```
-    
-  > *What to check* : Check for errors, warnings, review PowerShell cmdlets ran buy the HCW (search for "Cmdlet=" string within the log)
+```
+%UserProfile%\AppData\Roaming\Microsoft\Exchange Hybrid Configuration
+```
+
+> *What to check* : Check for errors, warnings, review PowerShell cmdlets ran buy the HCW (search for "Cmdlet=" string within the log)
   
 #### What the HCW creates
   
-  HCW gathers many information from OnPrem and Online. Here's what it creates (sample from my Lab):
+HCW gathers many information from OnPrem and Online. Here's what it creates (sample from my Lab):
   
   ```powershell
 New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)' -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CONTOSO\AdminUser01)
