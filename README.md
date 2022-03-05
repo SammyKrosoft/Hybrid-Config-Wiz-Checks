@@ -63,6 +63,31 @@ Test-MigrationServerAvailability -ExchangeRemoteMove -RemoteServer $RemoteServer
   </details>
   
   <details>
+  <summary>Check HCW logs</summary>
+    
+#### HCW log location
+  
+    By default, these logs are located here:
+    
+    ```
+    %UserProfile%\AppData\Roaming\Microsoft\Exchange Hybrid Configuration
+    ```
+    
+  > *What to check* : Check for errors, warnings, review PowerShell cmdlets ran buy the HCW (search for "Cmdlet=" string within the log)
+  
+#### What the HCW creates
+  
+  HCW gathers many information from OnPrem and Online. Here's what it creates (sample from my Lab):
+  
+  ```powershell
+New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)' -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CONTOSO\AdminUser01)
+  ```
+  
+  > NOTE: For reference or "baseline", you'll find a log of a successful HCW deployment on this repository. The format is ```YYYYMMDD_HHMMSS.log``` under the above mentionned folder.
+  
+  </details>
+  
+  <details>
   <summary>Check IIS Logs</summary>
 
 If you get something like this:
@@ -71,6 +96,6 @@ If you get something like this:
 WebExceptionStatus=ProtocolError;ResponseStatusCode=400;WebException=System.Net.WebException: The remote server returned an error: (400) Bad Request.    at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)    at Microsoft.Exchange.HttpProxy.ProxyRequestHandler.<>c__DisplayClass2c.<OnResponseReady>b__2b()
 ```
 
-Check that ExternalURL matches the published Remote Migration Endpoint FQDN
+Check that ExternalURL matches the published Remote Migration Endpoint FQDN and reachable from outside
 
   </details>
