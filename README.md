@@ -15,7 +15,7 @@ Check EWS vdir configuration
 Get-WebServicesVirtualDirectory -ADPropertiesOnly |ft ExternalAuthenticationMethods,InternalURL, Externalurl,MRSproxyEnabled,Server
 ```
 
-Expected: External URL matches published fqdn for migration endpoint, and potentially, ExternalURL should match InternalURL
+> Expected: External URL matches published fqdn for migration endpoint, and potentially, ExternalURL should match InternalURL
 
 </details>
 
@@ -26,7 +26,7 @@ Expected: External URL matches published fqdn for migration endpoint, and potent
 Test-MRSHealth | ft Identity, check, passed, IsValid, Message
 ```
 
-Expected: all pass. If Pass = False for an item, check Message to troubleshoot.
+> Expected: all pass. If Pass = False for an item, check Message to troubleshoot.
 
   </details>
   
@@ -37,7 +37,7 @@ Expected: all pass. If Pass = False for an item, check Message to troubleshoot.
 https://mail.exampledomain/ews/mrsproxy.svc
 ```
 
-Expected: Authentication prompt pop-up. If not, EWS or MRSProxy is not configured.
+> Expected: Authentication prompt pop-up. If not, EWS or MRSProxy is not configured.
 
   </details>
   
