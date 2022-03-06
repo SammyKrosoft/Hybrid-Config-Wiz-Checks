@@ -8,6 +8,9 @@ My primary SMTP domain : ```Contoso.ca``` <br>
 My smarthost that I publish on Internet (public DNS resolution) : ```mail.contoso.ca``` <br>
 My O365 tenant default name : ```contoso.onmicrosoft.com```
 
+<Details>
+<summary>New-* cmdlets ran by HCW </summary>
+
 ```powershell
 New-HybridConfiguration
 Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null -Domains 'Contoso.ca' -OnPremisesSmartHost 'mail.contoso.ca' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca' -SendingTransportServers 'E2016-01' -ReceivingTransportServers 'E2016-01' -EdgeTransportServers $null -Features FreeBusy,MoveMailbox,Mailtips,MessageTracking,OwaRedirection,OnlineArchive,SecureMail,Photos
@@ -49,8 +52,12 @@ New-AuthServer -Name 'EvoSts - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetada
 # New-MigrationEndpoint
 New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)' -ExchangeRemoteMove: $true -RemoteServer 'mail.Contoso.ca' -Credentials (Get-Credential -UserName CANADADREY\samdrey)
 ```
+</details>
 
+<details>
+<summary></summary>
 
+</details>
 
 ## Post HCW install tests to do
 
