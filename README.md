@@ -3,9 +3,10 @@ This is to check Exchange Hybrid Config status
 
 ## What the Hybrid Configuration Wizard creates
 
-My server I chose for Hybrid connection (bothfor Client Access and Mail flow) : ```E2016-01```
-My primary SMTP domain : ```Contoso.ca```
-My smarthost that I publish on Internet (public DNS resolution) : ```mail.contoso.ca```
+My server I chose for Hybrid connection (bothfor Client Access and Mail flow) : ```E2016-01``` <br>
+My primary SMTP domain : ```Contoso.ca``` <br>
+My smarthost that I publish on Internet (public DNS resolution) : ```mail.contoso.ca``` <br>
+My O365 tenant default name : ```contoso.onmicrosoft.com```
 
 ```powershell
 New-HybridConfiguration
