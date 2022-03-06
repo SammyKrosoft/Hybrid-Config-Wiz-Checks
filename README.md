@@ -46,7 +46,6 @@ New-IntraOrganizationConnector -Name 'HybridIOC - a3e87a2d-b84e-43cb-bf18-59aac4
 
 # New-AuthServer
 New-AuthServer -Name 'ACS - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://accounts.accesscontrol.windows.net/e5923069-9fac-4809-b7c9-a0893265a0e0/metadata/json/1' -DomainName 'Contoso.ca','contoso.mail.onmicrosoft.com'
-
 New-AuthServer -Name 'EvoSts - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://login.windows.net/contoso.onmicrosoft.com/federationmetadata/2007-06/federationmetadata.xml' -Type AzureAD
 
 # New-MigrationEndpoint
