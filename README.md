@@ -84,6 +84,8 @@ Set-ReceiveConnector -AuthMechanism 'Tls, Integrated, BasicAuth, BasicAuthRequir
 
 Set-PartnerApplication -Identity 'Exchange Online' -Enabled: $true
 
+Test-MigrationServerAvailability -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName contoso\samdrey)
+
 New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)' -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName contoso\samdrey)
 
 Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Comment 'rZTLTsJQEIbnUYwPgIVyKQZZWCSaaFwUdV3bisjNtKDy8uo30+LCCAU1J6dn5szl/zsz7cd7R3xZSspKZCYL6clcphLKCO1ABrKSZywncigBcoZHgr2CtiBGvYbYumQJkUOJ2T3LtsIrQuvI0RaMLvYr9BjbPnh9Mk5Y53jdmyU2pHUuzXuN5Qk5ItbnfiYP+A1BSY1thp4gb8M9JW4OTmIROXKInnGjeLtiKB+fuFFRg1u7zdDnJZW+MP+m1A29Li3xpCEOpz6bUuX00NrIXlHtTTjKogcvzT3gbsp5gxaZFskYz925NMU1Ng7bNQbKrIFUY+UslU8ZorIKjOeLPX9fm5qtKrsNdl4Rz+5dtnLZjKMsLmGafXVyVvR1jpcvj5zKePucls3Lbgj5tHz36GNNLfpM3gw/Lfoc/XMfXeuhY5XTiWsVc/U3RvpWdxY35quYIL0yG0v7UhY7dHs9PwH2dXUd1jG7yrMO84q9RwNdWefzV4b5E68An8jeIrH/Sbxn1/X7XxY9L8/dlU8='
