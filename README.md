@@ -48,7 +48,10 @@ New-IntraOrganizationConnector -Name 'HybridIOC - a3e87a2d-b84e-43cb-bf18-59aac4
 New-AuthServer -Name 'ACS - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://accounts.accesscontrol.windows.net/e5923069-9fac-4809-b7c9-a0893265a0e0/metadata/json/1' -DomainName 'Contoso.ca','contoso.mail.onmicrosoft.com'
 New-AuthServer -Name 'EvoSts - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://login.windows.net/contoso.onmicrosoft.com/federationmetadata/2007-06/federationmetadata.xml' -Type AzureAD
 
-# New-MigrationEndpoint
+# Test-MigrationServerAvailability and New-MigrationEndpoint
+# Before, HCW tests remove migration server availability
+Test-MigrationServerAvailability -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CANADADREY\samdrey)
+
 New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)' -ExchangeRemoteMove: $true -RemoteServer 'mail.Contoso.ca' -Credentials (Get-Credential -UserName CANADADREY\samdrey)
 ```
 </details>
@@ -57,27 +60,83 @@ New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)'
 <summary>Set-* commands executed by the HCW</summary>
   
 ```powershell
-Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null -Domains 'CanadaDrey.ca' -OnPremisesSmartHost 'mail.canadasam.ca' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.canadasam.ca' -SendingTransportServers 'E2016-01' -ReceivingTransportServers 'E2016-01' -EdgeTransportServers $null -Features FreeBusy,MoveMailbox,Mailtips,MessageTracking,OwaRedirection,OnlineArchive,SecureMail,Photos
+Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null -Domains 'contoso.ca' -OnPremisesSmartHost 'mail.contoso.ca' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca' -SendingTransportServers 'E2016-01' -ReceivingTransportServers 'E2016-01' -EdgeTransportServers $null -Features FreeBusy,MoveMailbox,Mailtips,MessageTracking,OwaRedirection,OnlineArchive,SecureMail,Photos
 
 Set-RemoteDomain -TargetDeliveryDomain: $true -Identity 'Hybrid Domain - canadadrey.mail.onmicrosoft.com'
 
 Set-RemoteDomain -TrustedMailInboundEnabled: $true -Identity 'Hybrid Domain - canadadrey.onmicrosoft.com'
 
-Set-EmailAddressPolicy -Identity 'Default Policy' -ForceUpgrade: $true -EnabledEmailAddressTemplates 'SMTP:@canadadrey.ca','smtp:%m@canadadrey.mail.onmicrosoft.com'
+Set-EmailAddressPolicy -Identity 'Default Policy' -ForceUpgrade: $true -EnabledEmailAddressTemplates 'SMTP:@contoso.ca','smtp:%m@canadadrey.mail.onmicrosoft.com'
 
-Set-OrganizationRelationship -MailboxMoveEnabled: $true -FreeBusyAccessEnabled: $true -FreeBusyAccessLevel LimitedDetails -ArchiveAccessEnabled: $true -MailTipsAccessEnabled: $true -MailTipsAccessLevel All -DeliveryReportEnabled: $true -PhotosEnabled: $true -TargetOwaURL 'http://outlook.com/owa/CanadaDrey.ca' -Identity 'On-premises to O365 - 177cd94d-be11-44e9-b09f-db69389f3a35'
+Set-OrganizationRelationship -MailboxMoveEnabled: $true -FreeBusyAccessEnabled: $true -FreeBusyAccessLevel LimitedDetails -ArchiveAccessEnabled: $true -MailTipsAccessEnabled: $true -MailTipsAccessLevel All -DeliveryReportEnabled: $true -PhotosEnabled: $true -TargetOwaURL 'http://outlook.com/owa/contoso.ca' -Identity 'On-premises to O365 - 177cd94d-be11-44e9-b09f-db69389f3a35'
 
-Set-OrganizationRelationship -FreeBusyAccessEnabled: $true -FreeBusyAccessLevel LimitedDetails -TargetSharingEpr $null -MailTipsAccessEnabled: $true -MailTipsAccessLevel All -DeliveryReportEnabled: $true -PhotosEnabled: $true -TargetOwaURL 'https://mail.canadasam.ca/owa' -Identity 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5'
+Set-OrganizationRelationship -FreeBusyAccessEnabled: $true -FreeBusyAccessLevel LimitedDetails -TargetSharingEpr $null -MailTipsAccessEnabled: $true -MailTipsAccessLevel All -DeliveryReportEnabled: $true -PhotosEnabled: $true -TargetOwaURL 'https://mail.contoso.ca/owa' -Identity 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5'
 
 Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null
 
-Set-ReceiveConnector -AuthMechanism 'Tls, Integrated, BasicAuth, BasicAuthRequireTLS, ExchangeServer' -Bindings '[::]:25','0.0.0.0:25' -Fqdn 'E2016-01.CanadaDrey.ca' -PermissionGroups 'AnonymousUsers, ExchangeServers, ExchangeLegacyServers' -RemoteIPRanges '::-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff','0.0.0.0-255.255.255.255' -RequireTLS: $false -TLSDomainCapabilities 'mail.protection.outlook.com:AcceptCloudServicesMail' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.canadasam.ca' -TransportRole FrontendTransport -Identity 'E2016-01\Default Frontend E2016-01'
+Set-ReceiveConnector -AuthMechanism 'Tls, Integrated, BasicAuth, BasicAuthRequireTLS, ExchangeServer' -Bindings '[::]:25','0.0.0.0:25' -Fqdn 'E2016-01.contoso.ca' -PermissionGroups 'AnonymousUsers, ExchangeServers, ExchangeLegacyServers' -RemoteIPRanges '::-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff','0.0.0.0-255.255.255.255' -RequireTLS: $false -TLSDomainCapabilities 'mail.protection.outlook.com:AcceptCloudServicesMail' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca' -TransportRole FrontendTransport -Identity 'E2016-01\Default Frontend E2016-01'
 
 Set-PartnerApplication -Identity 'Exchange Online' -Enabled: $true
+
+New-MigrationEndpoint -Name 'Hybrid Migration Endpoint - EWS (Default Web Site)' -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CANADADREY\samdrey)
 
 Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Comment 'rZTLTsJQEIbnUYwPgIVyKQZZWCSaaFwUdV3bisjNtKDy8uo30+LCCAU1J6dn5szl/zsz7cd7R3xZSspKZCYL6clcphLKCO1ABrKSZywncigBcoZHgr2CtiBGvYbYumQJkUOJ2T3LtsIrQuvI0RaMLvYr9BjbPnh9Mk5Y53jdmyU2pHUuzXuN5Qk5ItbnfiYP+A1BSY1thp4gb8M9JW4OTmIROXKInnGjeLtiKB+fuFFRg1u7zdDnJZW+MP+m1A29Li3xpCEOpz6bUuX00NrIXlHtTTjKogcvzT3gbsp5gxaZFskYz925NMU1Ng7bNQbKrIFUY+UslU8ZorIKjOeLPX9fm5qtKrsNdl4Rz+5dtnLZjKMsLmGafXVyVvR1jpcvj5zKePucls3Lbgj5tHz36GNNLfpM3gw/Lfoc/XMfXeuhY5XTiWsVc/U3RvpWdxY35quYIL0yG0v7UhY7dHs9PwH2dXUd1jG7yrMO84q9RwNdWefzV4b5E68An8jeIrH/Sbxn1/X7XxY9L8/dlU8='
 ```
 
+</details>
+
+<details>
+<summary>Set-* and New-* commands lauinched by HCW (include all of the above)</summary>
+
+```powershell
+
+Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null -Domains 'contoso.ca' -OnPremisesSmartHost 'mail.contoso.ca' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca' -SendingTransportServers 'E2016-01' -ReceivingTransportServers 'E2016-01' -EdgeTransportServers $null -Features FreeBusy,MoveMailbox,Mailtips,MessageTracking,OwaRedirection,OnlineArchive,SecureMail,Photos
+
+New-RemoteDomain -Name 'Hybrid Domain - canadadrey.mail.onmicrosoft.com' -DomainName 'canadadrey.mail.onmicrosoft.com'
+
+Set-RemoteDomain -TargetDeliveryDomain: $true -Identity 'Hybrid Domain - canadadrey.mail.onmicrosoft.com'
+
+New-RemoteDomain -Name 'Hybrid Domain - canadadrey.onmicrosoft.com' -DomainName 'canadadrey.onmicrosoft.com'
+
+Set-RemoteDomain -TrustedMailInboundEnabled: $true -Identity 'Hybrid Domain - canadadrey.onmicrosoft.com'
+
+New-AcceptedDomain -DomainName 'canadadrey.mail.onmicrosoft.com' -Name 'canadadrey.mail.onmicrosoft.com'
+
+Set-EmailAddressPolicy -Identity 'Default Policy' -ForceUpgrade: $true -EnabledEmailAddressTemplates 'SMTP:@contoso.ca','smtp:%m@canadadrey.mail.onmicrosoft.com'
+
+New-OrganizationRelationship -Name 'On-premises to O365 - 177cd94d-be11-44e9-b09f-db69389f3a35' -TargetApplicationUri $null -TargetAutodiscoverEpr $null -Enabled: $true -DomainNames 'canadadrey.mail.onmicrosoft.com'
+
+New-OrganizationRelationship -Name 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -TargetApplicationUri $null -TargetAutodiscoverEpr $null -Enabled: $true -DomainNames 'contoso.ca'
+
+Set-OrganizationRelationship -MailboxMoveEnabled: $true -FreeBusyAccessEnabled: $true -FreeBusyAccessLevel LimitedDetails -ArchiveAccessEnabled: $true -MailTipsAccessEnabled: $true -MailTipsAccessLevel All -DeliveryReportEnabled: $true -PhotosEnabled: $true -TargetOwaURL 'http://outlook.com/owa/contoso.ca' -Identity 'On-premises to O365 - 177cd94d-be11-44e9-b09f-db69389f3a35'
+
+Set-OrganizationRelationship -FreeBusyAccessEnabled: $true -FreeBusyAccessLevel LimitedDetails -TargetSharingEpr $null -MailTipsAccessEnabled: $true -MailTipsAccessLevel All -DeliveryReportEnabled: $true -PhotosEnabled: $true -TargetOwaURL 'https://mail.contoso.ca/owa' -Identity 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5'
+
+Set-HybridConfiguration -ClientAccessServers $null -ExternalIPAddresses $null
+
+New-SendConnector -Name 'Outbound to Office 365 - 177cd94d-be11-44e9-b09f-db69389f3a35' -AddressSpaces 'smtp:canadadrey.mail.onmicrosoft.com;1' -DNSRoutingEnabled: $true -ErrorPolicies Default -Fqdn 'mail.contoso.ca' -RequireTLS: $true -IgnoreSTARTTLS: $false -SourceTransportServers 'E2016-01' -SmartHosts $null -TLSAuthLevel DomainValidation -DomainSecureEnabled: $false -TLSDomain 'mail.protection.outlook.com' -CloudServicesMailEnabled: $true -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca'
+
+Set-ReceiveConnector -AuthMechanism 'Tls, Integrated, BasicAuth, BasicAuthRequireTLS, ExchangeServer' -Bindings '[::]:25','0.0.0.0:25' -Fqdn 'E2016-01.contoso.ca' -PermissionGroups 'AnonymousUsers, ExchangeServers, ExchangeLegacyServers' -RemoteIPRanges '::-ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff','0.0.0.0-255.255.255.255' -RequireTLS: $false -TLSDomainCapabilities 'mail.protection.outlook.com:AcceptCloudServicesMail' -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.contoso.ca' -TransportRole FrontendTransport -Identity 'E2016-01\Default Frontend E2016-01'
+
+New-InboundConnector -Name 'Inbound from a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -CloudServicesMailEnabled: $true -ConnectorSource HybridWizard -ConnectorType OnPremises -RequireTLS: $true -SenderDomains '*' -SenderIPAddresses $null -RestrictDomainsToIPAddresses: $false -TLSSenderCertificateName 'mail.contoso.ca' -AssociatedAcceptedDomains $null
+
+New-OutboundConnector -Name 'Outbound to a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -RecipientDomains 'contoso.ca' -SmartHosts 'mail.contoso.ca' -ConnectorSource HybridWizard -ConnectorType OnPremises -TLSSettings DomainValidation -TLSDomain 'mail.contoso.ca' -CloudServicesMailEnabled: $true -RouteAllMessagesViaOnPremises: $false -UseMxRecord: $false -IsTransportRuleScoped: $false
+
+New-OnPremisesOrganization -HybridDomains 'contoso.ca' -InboundConnector 'Inbound from a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OutboundConnector 'Outbound to a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OrganizationRelationship 'O365 to On-premises - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OrganizationName CANADADREYMSG -Name 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -OrganizationGuid 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5'
+
+New-IntraOrganizationConnector -Name 'HybridIOC - 177cd94d-be11-44e9-b09f-db69389f3a35' -DiscoveryEndpoint 'https://autodiscover-s.outlook.com/autodiscover/autodiscover.svc' -TargetAddressDomains 'canadadrey.mail.onmicrosoft.com' -Enabled: $true
+
+New-IntraOrganizationConnector -Name 'HybridIOC - a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -DiscoveryEndpoint 'https://mail.contoso.ca/autodiscover/autodiscover.svc' -TargetAddressDomains 'contoso.ca' -Enabled: $true
+
+Set-PartnerApplication -Identity 'Exchange Online' -Enabled: $true
+
+New-AuthServer -Name 'ACS - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://accounts.accesscontrol.windows.net/e5923069-9fac-4809-b7c9-a0893265a0e0/metadata/json/1' -DomainName 'contoso.ca','canadadrey.mail.onmicrosoft.com'
+
+New-AuthServer -Name 'EvoSts - 177cd94d-be11-44e9-b09f-db69389f3a35' -AuthMetadataUrl 'https://login.windows.net/canadadrey.onmicrosoft.com/federationmetadata/2007-06/federationmetadata.xml' -Type AzureAD
+
+Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Comment 'rZTLTsJQEIbnUYwPgIVyKQZZWCSaaFwUdV3bisjNtKDy8uo30+LCCAU1J6dn5szl/zsz7cd7R3xZSspKZCYL6clcphLKCO1ABrKSZywncigBcoZHgr2CtiBGvYbYumQJkUOJ2T3LtsIrQuvI0RaMLvYr9BjbPnh9Mk5Y53jdmyU2pHUuzXuN5Qk5ItbnfiYP+A1BSY1thp4gb8M9JW4OTmIROXKInnGjeLtiKB+fuFFRg1u7zdDnJZW+MP+m1A29Li3xpCEOpz6bUuX00NrIXlHtTTjKogcvzT3gbsp5gxaZFskYz925NMU1Ng7bNQbKrIFUY+UslU8ZorIKjOeLPX9fm5qtKrsNdl4Rz+5dtnLZjKMsLmGafXVyVvR1jpcvj5zKePucls3Lbgj5tHz36GNNLfpM3gw/Lfoc/XMfXeuhY5XTiWsVc/U3RvpWdxY35quYIL0yG0v7UhY7dHs9PwH2dXUd1jG7yrMO84q9RwNdWefzV4b5E68An8jeIrH/Sbxn1/X7XxY9L8/dlU8='
+
+```
 
 </details>
 
