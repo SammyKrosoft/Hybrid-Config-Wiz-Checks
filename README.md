@@ -1,7 +1,7 @@
 # Hybrid-Config-Wiz-Checks
 This is to check Exchange Hybrid Config status.
 
-NOTE: the most common issues for HCW deployment failures is failure to open Firewall rules that are required for HCW to create and set objects Online. Other causes can be lack or misconfigured public DNS names pointing to your Edge or Exchange Mailbox servers in charge of communicating with O365, especially for inbound traffic (SMTP inbound or EWS inbound for Free/Busy info).
+> NOTE: the most common issues for HCW deployment failures is failure to open Firewall rules that are required for HCW to create and set objects Online. Other causes can be lack or misconfigured public DNS names pointing to your Edge or Exchange Mailbox servers in charge of communicating with O365, especially for inbound traffic (SMTP inbound or EWS inbound for Free/Busy info).
 
 See the 2 links below for URLs/IPs to open inbound/outbound for Hybrid config and operation to work *(CTRL + Right Click to open on new tab)* :
 [Office 365 URLs and IP address ranges](https://docs.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide)
