@@ -7,6 +7,8 @@ See the 2 links below for URLs/IPs to open inbound/outbound for Hybrid config an
 [Office 365 URLs and IP address ranges](https://docs.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide) <br>
 [Hybrid deployment prerequisites](https://docs.microsoft.com/en-us/exchange/hybrid-deployment-prerequisites) <br>
 
+> NOTE2: TLS 1.2 must be enabled on your OnPrem servers that will connect to O365 - check [this repository for a quick way to check if TLS1.2 is installed](https://github.com/SammyKrosoft/Check-or-Enable-TLS-1.2-with-PowerShell)
+
 ## What the Hybrid Configuration Wizard creates
 
 My server I chose for Hybrid connection (bothfor Client Access and Mail flow) : ```E2016-01``` <br>
