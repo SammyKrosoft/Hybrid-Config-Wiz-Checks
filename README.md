@@ -1,5 +1,11 @@
 # Hybrid-Config-Wiz-Checks
-This is to check Exchange Hybrid Config status.
+In this post, I am referring to the Exchange Hybrid Configuration Wizard as HCW.
+This is an article to help you check Exchange Hybrid Config status. HCW is nothing more than a PowerShell scripts executor, a graphical wrapper executing PowerShell commands. I'm starting here with the list of PowerShell commands the HCW runs, through different views :
+
+- List of what the HCW creates (domains, connectors, endpoint...)
+- List of what the HCW sets (connectors, e-mail address policy, ...)
+- Table view of all the underlying PowerShell commands HCW runs during setup (Get-\*, New-\*, Set-\*)
+- Table view of only the New-\* and the Set-\* PowerShell commands
 
 > NOTE: the most common issues for HCW deployment failures is failure to open Firewall rules that are required for HCW to create and set objects Online. Other causes can be lack or misconfigured public DNS names pointing to your Edge or Exchange Mailbox servers in charge of communicating with O365, especially for inbound traffic (SMTP inbound or EWS inbound for Free/Busy info).
 
