@@ -7,7 +7,7 @@ This is an article to help you check Exchange Hybrid Config status. HCW is nothi
 - Table view of all the underlying PowerShell commands HCW runs during setup (Get-\*, New-\*, Set-\*)
 - Table view of only the New-\* and the Set-\* PowerShell commands
 
-Then I have put a few tests you can do to check that can help you check, track and solve some challenges you may have with your hybrid configuration.
+Then I have put a few tests you can do to check, track and solve some challenges you may have with your hybrid configuration.
 
 > NOTE: the most common issues for HCW deployment failures is failure to open Firewall rules that are required for HCW to create and set objects Online. Other causes can be lack or misconfigured public DNS names pointing to your Edge or Exchange Mailbox servers in charge of communicating with O365, especially for inbound traffic (SMTP inbound or EWS inbound for Free/Busy info).
 
