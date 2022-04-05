@@ -258,14 +258,28 @@ During migration, you can encounter several types of issues caused by things suc
 I'll populate the issues I encounter on my experiences with Exchange OnPrem -> Exchange Online migrations.
 
 - Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
-=> Migration fails stating that the account has a SMTP address with a domain that is not on the accepted domains slist
+*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
+  => Migration fails stating that the account has a SMTP address with a domain that is not on the accepted domains list.
+  
   
 - Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
+*Error message*: ```The target mailbox doesn't have an SMTP proxy matching 'canadadrey.mail.onmicrosoft.com'.```
 Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
   If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
 The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or ```smtp:alias@contoso.mail.onmicrosoft.com``` as a secondary SMTP address template for these policies, or remove/modify the filter of the higher level policy/policies that can affect these mailboxes
-Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled
+<br>
+  Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled. This attribute corresponds to the check box "Automatically update email addresses based on the email address policy applied to this recipient" on the Mailbox properties ("email address" section):
+  
+  ![image](https://user-images.githubusercontent.com/33433229/161673419-6b260356-ac85-475b-9118-b1f89c66e99f.png)
 
+  Highlight on the Email Addres Policy Enabled check box:
+  
+  ![image](https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png)
+
+- A mailbox is already in an old (failed or succeeded) migration batch
+  *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
+=> Just remove the mailbox from that batch, or just delete that batch.
+  
   
 ## Post HCW install tests to do
 
