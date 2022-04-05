@@ -258,17 +258,35 @@ During migration, you can encounter several types of issues caused by things suc
 I'll populate the issues I encounter on my experiences with Exchange OnPrem -> Exchange Online migrations.
 
 - Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
-*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
-  => Migration fails stating that the account has a SMTP address with a domain that is not on the accepted domains list.
+<br>*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
+<br>=> Migration fails stating that the account has a SMTP address with a domain that is not on the accepted domains list. Either remove the SMTP addresses from your MEU with domain not present on the accepted domains of the tenant and/or the OnPrem environment, or add that domain to your accepted domains.
+<br><br>
+  > *Note:* Forcing an Email address policy update does not remove extra SMTP addresses on user mailboxes (or MEU). You must first remove all Email addresses (need to disable EmailAddress Policies on the mailboxes first), and then force the Email Address Policy to update mailboxes.
   
+  Here's a sample on how to do it in Powershell:
   
-- Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
-*Error message*: ```The target mailbox doesn't have an SMTP proxy matching 'canadadrey.mail.onmicrosoft.com'.```
-Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
-  If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
+  ```powershell
+
+  # Remove all E-mail addresses for all users you want to cleanup the SMTP Addresses
+  # and tell the mailboxes not to use the Email Address Policy :
+  
+  get-mailbox -filter {RecipientTypeDetails -eq 'UserMailbox'} | Set-Mailbox -EmailAddressPolicyEnabled:$False -EmailAddresses $Null
+  
+  # Then enable the Email Address Policy again on the mailboxes, and force a Policy update:
+  
+  get-mailbox -filter {RecipientTypeDetails -eq 'UserMailbox'} | Set-Mailbox -EmailAddressPolicyEnabled:$True
+  
+  Get-EmailAddressPolicy | Update-EmailAddressPolicy -Confirm:$False
+  
+  ```
+  
+  - Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
+<br>*Error message*: ```The target mailbox doesn't have an SMTP proxy matching 'canadadrey.mail.onmicrosoft.com'.```
+<br><br>Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
+<br>If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
 The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or ```smtp:alias@contoso.mail.onmicrosoft.com``` as a secondary SMTP address template for these policies, or remove/modify the filter of the higher level policy/policies that can affect these mailboxes
-<br>
-  Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled. This attribute corresponds to the check box "Automatically update email addresses based on the email address policy applied to this recipient" on the Mailbox properties ("email address" section):
+
+  <br><br>Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled. This attribute corresponds to the check box "Automatically update email addresses based on the email address policy applied to this recipient" on the Mailbox properties ("email address" section):
   
   <img src="https://user-images.githubusercontent.com/33433229/161673419-6b260356-ac85-475b-9118-b1f89c66e99f.png" width = 50% height = 50%>
 
