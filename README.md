@@ -245,7 +245,7 @@ Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Com
 
 </details>
 
-## Messaging environment configuration Pre-Requisites
+## Some common issues preventing Exchange Online (O365 e-mail) migration
 
 ### A few acronyms first
   
