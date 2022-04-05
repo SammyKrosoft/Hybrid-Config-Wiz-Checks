@@ -274,7 +274,7 @@ The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or `
 
   Highlight on the Email Addres Policy Enabled check box:
   
-  <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png" width = 50% height = 50%>
+  <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png" width = 30% height = 30%>
 
 - A mailbox is already in an old (failed or succeeded) migration batch
   *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
@@ -294,6 +294,20 @@ $MigrationBatch = Get-MigrationBatch | Select -First 1
   $MoveRequests
   
   ```
+  
+  A sample output:
+  
+  ```output
+  DisplayName        Status    TargetDatabase    
+-----------        ------    --------------    
+Alain Posteur      Completed CANPR01DG544-db134
+Anne Orak          Completed CANPR01DG254-db188
+Alex Pyration      Completed CANPR01DG184-db109
+Abel Auboisdormant Completed CANPR01DG522-db033
+Alain Tuission     Completed CANPR01DG599-db018
+Aude Vaisselle     Completed CANPR01DG603-db309
+  ```
+  
   
 ## Post HCW install tests to do
 
