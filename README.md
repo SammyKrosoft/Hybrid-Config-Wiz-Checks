@@ -283,6 +283,8 @@ The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or `
 > **Note:** To check mailbox move requests from batches, you can use the following in PowerShell:
   ```powershell
   
+  # Note that I like putting my results in variables, that avoids having to send the query to the servers each time I want an information. Don't forget to update your variables if you make change to objects on the servers at some point, as data stored in variables are static objects.
+  
 $MigrationBatch = Get-MigrationBatch | Select -First 1
   
   # Or if  you know the name of your batch:
