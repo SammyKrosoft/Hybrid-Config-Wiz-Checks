@@ -303,7 +303,7 @@ The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or `
   <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png" width = 30% height = 30%>
 
 - A mailbox is already in an old (failed or succeeded) migration batch
-  *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
+ <br> *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
 => remove the move mailbox request from that batch, or just delete that batch.
 
 > **Note:** To check mailbox move requests from batches, you can use the following in PowerShell:
