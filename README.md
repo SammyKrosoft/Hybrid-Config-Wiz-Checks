@@ -270,11 +270,11 @@ The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or `
 <br>
   Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled. This attribute corresponds to the check box "Automatically update email addresses based on the email address policy applied to this recipient" on the Mailbox properties ("email address" section):
   
-  ![image](https://user-images.githubusercontent.com/33433229/161673419-6b260356-ac85-475b-9118-b1f89c66e99f.png)
+  <img src="https://user-images.githubusercontent.com/33433229/161673419-6b260356-ac85-475b-9118-b1f89c66e99f.png" width = 50% height = 50%>
 
   Highlight on the Email Addres Policy Enabled check box:
   
-  ![image](https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png)
+  <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png">
 
 - A mailbox is already in an old (failed or succeeded) migration batch
   *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
