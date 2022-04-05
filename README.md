@@ -274,12 +274,26 @@ The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or `
 
   Highlight on the Email Addres Policy Enabled check box:
   
-  <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png">
+  <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png" width = 50% height = 50%>
 
 - A mailbox is already in an old (failed or succeeded) migration batch
   *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
-=> Just remove the mailbox from that batch, or just delete that batch.
+=> remove the move mailbox request from that batch, or just delete that batch.
+
+> **Note:** To check mailbox move requests from batches, you can use the following in PowerShell:
+  ```powershell
   
+$MigrationBatch = Get-MigrationBatch | Select -First 1
+  
+  # Or if  you know the name of your batch:
+  
+  $MigrationBatch = Get-MigrationBatch "Your batch name"
+  
+  $MoveRequests = Get-MoveRequest -BatchName "MigrationService:$($MigrationBatch.Identity)"
+
+  $MoveRequests
+  
+  ```
   
 ## Post HCW install tests to do
 
