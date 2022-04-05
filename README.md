@@ -263,14 +263,18 @@ I'll populate the issues I encounter on my experiences with Exchange OnPrem -> E
 
 - Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
 <br>*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
-<br>=> Migration fails stating that the account has a SMTP address with a domain that is not on the accepted domains list. Either remove the SMTP addresses from your MEU with domain not present on the accepted domains of the tenant and/or the OnPrem environment, or add that domain to your accepted domains.
+<br>=> Either remove the SMTP addresses from your MEU with domain not present on the accepted domains of the tenant and/or the OnPrem environment, or add that domain to your accepted domains.
 <br><br>
-  > *Note:* Forcing an Email address policy update does not remove extra SMTP addresses on user mailboxes (or MEU). You must first remove all Email addresses (need to disable EmailAddress Policies on the mailboxes first), and then force the Email Address Policy to update mailboxes.
+  > *Note:* Forcing an Email address policy update does not remove extra SMTP addresses on user mailboxes (or MEU). You must either manually (or with a script) remove these extra old SMTP addresses, or  you can also remove all Email addresses (need to disable EmailAddress Policies on the mailboxes first), and then force the Email Address Policy to update mailboxes with the addresses from the Default Policy - or the policy where you manually added the @mail.onmicrosoft.com address.
   
-  Here's a sample on how to do it in Powershell:
+  Here's a sample on how to remove all e-mail addresses and restamp these using Powershell:
   
   ```powershell
 
+  # ******************************* WARNING / ACHTUNG ********************************
+  # * this is a sample, try it in a lab first, adjust it and apply to the prod ONLY 
+  # * when you know exactly what you are doing !
+  # ********************************* End of Warning *********************************
   # Remove all E-mail addresses for all users you want to cleanup the SMTP Addresses
   # and tell the mailboxes not to use the Email Address Policy :
   
@@ -284,7 +288,7 @@ I'll populate the issues I encounter on my experiences with Exchange OnPrem -> E
   
   ```
   
-  - Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
+- Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
 <br>*Error message*: ```The target mailbox doesn't have an SMTP proxy matching 'canadadrey.mail.onmicrosoft.com'.```
 <br><br>Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
 <br>If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
