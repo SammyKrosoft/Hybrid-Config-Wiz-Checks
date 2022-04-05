@@ -245,6 +245,28 @@ Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Com
 
 </details>
 
+## Messaging environment configuration Pre-Requisites
+
+### A few acronyms first
+  
+  MEU = Mail-Enabled Users
+  
+### Preventing some issues preventing migration
+  
+During migration, you can encounter several types of issues caused by things such as missing accepted domains, mailboxes not stamped with @contoso.mail.onmicrosoft.com, etc... Many are being solved with trial and errors, but if we can know of some in advance we can avoid some hassle when trying to migrate mailboxes.
+
+I'll populate the issues I encounter on my experiences with Exchange OnPrem -> Exchange Online migrations.
+
+- Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
+=> Migration fails stating that the account has a SMTP address with a domain that is not on the accepted domains slist
+  
+- Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
+Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
+  If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
+The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or ```smtp:alias@contoso.mail.onmicrosoft.com``` as a secondary SMTP address template for these policies, or remove/modify the filter of the higher level policy/policies that can affect these mailboxes
+Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled
+
+  
 ## Post HCW install tests to do
 
 <details>
