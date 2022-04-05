@@ -249,7 +249,11 @@ Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Com
 
 ### A few acronyms first
   
-  MEU = Mail-Enabled Users
+*(not much there for now, I will populate it on the go)*
+  
+  AD = Active Directory (the Microsoft directory where users accounts are stored and secured)
+  MEU = Mail-Enabled Users (Active Directory accounts with an e-mail address but no mailboxes - used to transfer or forward e-mails, in O365 it's also used to match OnPremises mailboxes to O365 accounts for O365 migrations)
+  SMTP = Simple Mail Transfer Protocol (the protocol used to transport e-mail data through networks)
   
 ### Preventing some issues preventing migration
   
