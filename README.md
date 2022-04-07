@@ -335,6 +335,25 @@ Abel Auboisdormant Completed CANPR01DG522-db033
 Alain Tuission     Completed CANPR01DG599-db018
 Aude Vaisselle     Completed CANPR01DG603-db309
   ```
+
+ <br>
+- When trying to move mailboxes to Exchange Online, you get an error message stating that the Endpoint or MRS Proxy 'name' is unavailable.
+<br>=> If you change the password of the account that was used to create the migration endpoint, you must update the new credentials to your migration endpoint.
+  <br>
+  To update the migration endpoint, get your migration endpoint, and just set the credentials with the admin account that have access to it. This has to be run from the Tenant's Powershell session.
+  <br>
+  First test the  remote endpoint server FQDN is still reachable from Internet:
+  ```powershell
+  Test-MigrationServerAvailability -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CONTOSO\Admin)
+  ```
+  
+  <br>
+  Then update the credentials which password has been changed since last time HCW was run:
+  ```powershell
+  Get-MigrationEndpoint | Set-MigrationEndpoint -Credentials (Get-Credential -Message "creds" -UserName "CONTOSO\Admin")
+  ```
+
+  
   
   
 ## Post HCW install tests to do
