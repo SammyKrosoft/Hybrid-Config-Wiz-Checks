@@ -264,7 +264,7 @@ I'll populate the issues I encounter on my experiences with Exchange OnPrem -> E
 #### Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
 <br>*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
 <br>=> Either remove the SMTP addresses from your MEU with domain not present on the accepted domains of the tenant and/or the OnPrem environment, or add that domain to your accepted domains.
-<br><br>
+<br>
   > *Note:* Forcing an Email address policy update does not remove extra SMTP addresses on user mailboxes (or MEU). You must either manually (or with a script) remove these extra old SMTP addresses, or  you can also remove all Email addresses (need to disable EmailAddress Policies on the mailboxes first), and then force the Email Address Policy to update mailboxes with the addresses from the Default Policy - or the policy where you manually added the @mail.onmicrosoft.com address.
   
   Here's a sample on how to remove all e-mail addresses and restamp these using Powershell:
@@ -344,29 +344,23 @@ Aude Vaisselle     Completed CANPR01DG603-db309
   
   
   => If you change the password of the account that was used to create the migration endpoint, you must update the new credentials to your migration endpoint.
-  
-  <br><br>
-  
-  To update the migration endpoint, get your migration endpoint, and just set the credentials with the admin account that have access to it. This has to be run from the Tenant's Powershell session.
-  
-  <br>
+    <br>
+    To update the migration endpoint, get your migration endpoint, and just set the credentials with the admin account that have access to it. This has to be run from the Tenant's Powershell session.
+    <br>
   First test the  remote endpoint server FQDN is still reachable from Internet:
   
   ```powershell
   Test-MigrationServerAvailability -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CONTOSO\Admin)
   ```
-  <br>
   
-  Then update the credentials which password has been changed since last time HCW was run:
+  <br>
+    Then update the credentials which password has been changed since last time HCW was run:
   
   ```powershell
   Get-MigrationEndpoint | Set-MigrationEndpoint -Credentials (Get-Credential -Message "creds" -UserName "CONTOSO\Admin")
   ```
 
-  
-  
-  
-## Post HCW install tests to do
+  ## Post HCW install tests to do
 
 <details>
 <summary>
