@@ -261,7 +261,7 @@ During migration, you can encounter several types of issues caused by things suc
 
 I'll populate the issues I encounter on my experiences with Exchange OnPrem -> Exchange Online migrations.
 
-- Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
+#### Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
 <br>*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
 <br>=> Either remove the SMTP addresses from your MEU with domain not present on the accepted domains of the tenant and/or the OnPrem environment, or add that domain to your accepted domains.
 <br><br>
@@ -288,7 +288,7 @@ I'll populate the issues I encounter on my experiences with Exchange OnPrem -> E
   
   ```
   
-- Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
+#### Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
 <br>*Error message*: ```The target mailbox doesn't have an SMTP proxy matching 'canadadrey.mail.onmicrosoft.com'.```
 <br><br>Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
 <br>If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
@@ -302,7 +302,7 @@ The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or `
   
   <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png" width = 30% height = 30%>
 
-- A mailbox is already in an old (failed or succeeded) migration batch
+#### A mailbox is already in an old (failed or succeeded) migration batch
  <br> *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
 => remove the move mailbox request from that batch, or just delete that batch.
 
@@ -337,9 +337,10 @@ Aude Vaisselle     Completed CANPR01DG603-db309
   ```
 
  <br>
-- When trying to move mailboxes to Exchange Online, you get an error message stating that the Endpoint or MRS Proxy 'name' is unavailable.
-<br>=> If you change the password of the account that was used to create the migration endpoint, you must update the new credentials to your migration endpoint.
-  <br>
+#### When trying to move mailboxes to Exchange Online, you get an error message stating that the Endpoint or MRS Proxy 'name' is unavailable.
+<br>
+  => If you change the password of the account that was used to create the migration endpoint, you must update the new credentials to your migration endpoint.
+  <br><br>
   To update the migration endpoint, get your migration endpoint, and just set the credentials with the admin account that have access to it. This has to be run from the Tenant's Powershell session.
   <br>
   First test the  remote endpoint server FQDN is still reachable from Internet:
