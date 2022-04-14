@@ -341,7 +341,12 @@ Aude Vaisselle     Completed CANPR01DG603-db309
 #### When trying to move mailboxes to Exchange Online, you get an error message stating that the Endpoint or MRS Proxy 'name' is unavailable.
 
   <br>
-  
+  > This can be because the endpoint is unreachable:
+  - Firewall url or port inbound to the endpoint IP is closed
+  - DNS entry is gone or pointing to the wrong IP address
+  - MRS Proxy not enabled at the OnPrem Exchange server level
+  - Credentials stored when ```New-MigrationEndpoint``` or ```Set-MigrationEndpoint``` was run manually or by the HCW have not been updated if the password of that account used has been modified
+  <br>
   
   => If you change the password of the account that was used to create the migration endpoint, you must update the new credentials to your migration endpoint.
     <br>
