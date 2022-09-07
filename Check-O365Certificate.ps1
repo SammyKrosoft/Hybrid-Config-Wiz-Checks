@@ -24,7 +24,8 @@ $CertExchange | fl Subject, NotAfter, Services
 
 Write-Host "Checking Receive Connector from tenant" -BackgroundColor Yellow -ForegroundColor Blue
 
-
+The HCW is doing this:
+<#
 Set-ReceiveConnector -AuthMechanism 'Tls, Integrated, BasicAuth, BasicAuthRequireTLS, ExchangeServer' `
     -Bindings '[::]:25','0.0.0.0:25' `
     -Fqdn 'E2016-01.CanadaDrey.ca' `
@@ -35,7 +36,7 @@ Set-ReceiveConnector -AuthMechanism 'Tls, Integrated, BasicAuth, BasicAuthRequir
     -TLSCertificateName '<I>CN=GeoTrust TLS DV RSA Mixed SHA256 2020 CA-1, O=DigiCert Inc, C=US<S>CN=mail.canadasam.ca' `
     -TransportRole FrontendTransport `
     -Identity 'E2016-01\Default Frontend E2016-01'
-
+#>
 
 $Server = "E2016-01"
 $O365HybridReceiveConnector = Get-ReceiveConnector -Server $Server | ? {$_.Name -like "*default frontend*"}
