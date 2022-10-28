@@ -7,7 +7,7 @@ This is an article to help you check Exchange Hybrid Config status. HCW is nothi
 - Table view of all the underlying PowerShell commands HCW runs during setup (Get-\*, New-\*, Set-\*)
 - Table view of only the New-\* and the Set-\* PowerShell commands
 
-Then I have put a few tests you can do to check that can help you check, track and solve some challenges you may have with your hybrid configuration.
+Then I have put a few tests you can do to check, track and solve some challenges you may have with your hybrid configuration.
 
 > NOTE: the most common issues for HCW deployment failures is failure to open Firewall rules that are required for HCW to create and set objects Online. Other causes can be lack or misconfigured public DNS names pointing to your Edge or Exchange Mailbox servers in charge of communicating with O365, especially for inbound traffic (SMTP inbound or EWS inbound for Free/Busy info).
 
@@ -245,7 +245,131 @@ Set-OnPremisesOrganization -Identity 'a3e87a2d-b84e-43cb-bf18-59aac4c4f1e5' -Com
 
 </details>
 
-## Post HCW install tests to do
+## Some common issues preventing Exchange Online (O365 e-mail) migration
+
+### A few acronyms first
+  
+*(not much there for now, I will populate it on the go)*
+  
+  AD = Active Directory (the Microsoft directory where users accounts are stored and secured)<br>
+  MEU = Mail-Enabled Users (Active Directory accounts with an e-mail address but no mailboxes - used to transfer or forward e-mails, in O365 it's also used to match OnPremises mailboxes to O365 accounts for O365 migrations)<br>
+  SMTP = Simple Mail Transfer Protocol (the protocol used to transport e-mail data through networks)<br>
+  
+### Preventing some issues preventing migration
+  
+During migration, you can encounter several types of issues caused by things such as missing accepted domains, mailboxes not stamped with @contoso.mail.onmicrosoft.com, etc... Many are being solved with trial and errors, but if we can know of some in advance we can avoid some hassle when trying to migrate mailboxes.
+
+I'll populate the issues I encounter on my experiences with Exchange OnPrem -> Exchange Online migrations.
+
+#### Old custom SMTP address on the tenants MEU which SMTP @Domain is not on the "Accepted Domain" list
+<br>*Error message*: ```You can't use the domain  because it's not an accepted domain for your organization.```
+<br>=> Either remove the SMTP addresses from your MEU with domain not present on the accepted domains of the tenant and/or the OnPrem environment, or add that domain to your accepted domains.
+<br>
+  > *Note:* Forcing an Email address policy update does not remove extra SMTP addresses on user mailboxes (or MEU). You must either manually (or with a script) remove these extra old SMTP addresses, or  you can also remove all Email addresses (need to disable EmailAddress Policies on the mailboxes first), and then force the Email Address Policy to update mailboxes with the addresses from the Default Policy - or the policy where you manually added the @mail.onmicrosoft.com address.
+  
+  Here's a sample on how to remove all e-mail addresses and restamp these using Powershell:
+  
+  ```powershell
+
+  # ******************************* WARNING / ACHTUNG ********************************
+  # * this is a sample, try it in a lab first, adjust it and apply to the prod ONLY 
+  # * when you know exactly what you are doing !
+  # ********************************* End of Warning *********************************
+  # Remove all E-mail addresses for all users you want to cleanup the SMTP Addresses
+  # and tell the mailboxes not to use the Email Address Policy :
+  
+  get-mailbox -filter {RecipientTypeDetails -eq 'UserMailbox'} | Set-Mailbox -EmailAddressPolicyEnabled:$False -EmailAddresses $Null
+  
+  # Then enable the Email Address Policy again on the mailboxes, and force a Policy update:
+  
+  get-mailbox -filter {RecipientTypeDetails -eq 'UserMailbox'} | Set-Mailbox -EmailAddressPolicyEnabled:$True
+  
+  Get-EmailAddressPolicy | Update-EmailAddressPolicy -Confirm:$False
+  
+  ```
+  
+#### Mailboxes OnPremises not stamped with @contoso.mail.onmicrosoft.com
+<br>*Error message*: ```The target mailbox doesn't have an SMTP proxy matching 'canadadrey.mail.onmicrosoft.com'.```
+<br><br>Possibility #1 => it's is because HCW updates the Default E-mail Addresses Policy and not the other custom ones.
+<br>If you have E-mail address policies applying to mailboxes you want to move that have a higher priority than the "Default Policy", these mailboxes will not be stamped with a secondary smtp address with a @contoso.mail.onmicrosoft.com address. On O365, MEU have a @mail.onmicrosoft.com address, which is the one that is used to match OnPrem mailboxes with MEU for the migration.
+The solution is either to add ```smtp:%m@canadadrey.mail.onmicrosoft.com``` or ```smtp:alias@contoso.mail.onmicrosoft.com``` as a secondary SMTP address template for these policies, or remove/modify the filter of the higher level policy/policies that can affect these mailboxes
+
+  <br><br>Possibility #2 => your mailboxes don't have **EmailAddressPolicyEnabled** attribute enabled. This attribute corresponds to the check box "Automatically update email addresses based on the email address policy applied to this recipient" on the Mailbox properties ("email address" section):
+  
+  <img src="https://user-images.githubusercontent.com/33433229/161673419-6b260356-ac85-475b-9118-b1f89c66e99f.png" width = 50% height = 50%>
+
+  Highlight on the Email Addres Policy Enabled check box:
+  
+  <img src ="https://user-images.githubusercontent.com/33433229/161673440-f81cdcfc-5d49-4686-b586-b373ae843495.png" width = 30% height = 30%>
+
+#### A mailbox is already in an old (failed or succeeded) migration batch
+ <br> *Error message*: ```The user "Alain.Posteur@CanadaSam.ca" is already included in migration batch "myfirstbatch."  Please remove the user from any other batch and try again.```
+=> remove the move mailbox request from that batch, or just delete that batch.
+
+> **Note:** To check mailbox move requests from batches, you can use the following in PowerShell:
+  ```powershell
+  
+  # Note that I like putting my results in variables, that avoids having to send the query to the servers each time I want an information. Don't forget to update your variables if you make change to objects on the servers at some point, as data stored in variables are static objects.
+  
+$MigrationBatch = Get-MigrationBatch | Select -First 1
+  
+  # Or if  you know the name of your batch:
+  
+  $MigrationBatch = Get-MigrationBatch "Your batch name"
+  
+  $MoveRequests = Get-MoveRequest -BatchName "MigrationService:$($MigrationBatch.Identity)"
+
+  $MoveRequests
+  
+  ```
+  
+  A sample output:
+  
+  ```output
+  DisplayName        Status    TargetDatabase    
+-----------        ------    --------------    
+Alain Posteur      Completed CANPR01DG544-db134
+Anne Orak          Completed CANPR01DG254-db188
+Alex Pyration      Completed CANPR01DG184-db109
+Abel Auboisdormant Completed CANPR01DG522-db033
+Alain Tuission     Completed CANPR01DG599-db018
+Aude Vaisselle     Completed CANPR01DG603-db309
+  ```
+
+ <br>
+  
+#### When trying to move mailboxes to Exchange Online, you get an error message stating that the Endpoint or MRS Proxy 'name' is unavailable.
+
+  <br>
+  > This can be because the endpoint is unreachable:
+  
+  - Firewall url or port inbound to the endpoint IP is closed
+  
+  - DNS entry is gone or pointing to the wrong IP address
+  
+  - MRS Proxy not enabled at the OnPrem Exchange server level
+  
+  - Credentials stored when ```New-MigrationEndpoint``` or ```Set-MigrationEndpoint``` was run manually or by the HCW have not been updated if the password of that account used has been modified
+  <br>
+  
+  => If you change the password of the account that was used to create the migration endpoint, you must update the new credentials to your migration endpoint.
+    <br>
+    To update the migration endpoint, get your migration endpoint, and just set the credentials with the admin account that have access to it. This has to be run from the Tenant's Powershell session.
+    <br>
+  First test the  remote endpoint server FQDN is still reachable from Internet:
+  
+  ```powershell
+  Test-MigrationServerAvailability -ExchangeRemoteMove: $true -RemoteServer 'mail.contoso.ca' -Credentials (Get-Credential -UserName CONTOSO\Admin)
+  ```
+  
+  <br>
+    Then update the credentials which password has been changed since last time HCW was run:
+  
+  ```powershell
+  Get-MigrationEndpoint | Set-MigrationEndpoint -Credentials (Get-Credential -Message "creds" -UserName "CONTOSO\Admin")
+  ```
+
+  ## Post HCW install tests to do
 
 <details>
 <summary>
